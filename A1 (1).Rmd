@@ -1,0 +1,48 @@
+---
+title: "Econ3398 Assignment 1"
+output: word_document
+date: ""
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This assignment contains R programming and written response. Please submit
+
+-  the .R code file, and
+-  your written response.
+
+If you use R markdown/sweave, please submit the .Rmd/.Rnw file. If you work in groups,
+
+-  each group may have up to three members and make one submission;
+-  clearly write out the group members’ names and student IDs on your submissions;
+-  fill out the group contribution survey (see instructions in the submission portal).
+
+**Due at 11:59pm on Feb. 6; submissions are accepted until 11:59pm the following Monday without penalty. Using LaTeX will contribute to the overall "LaTeX bonus".**
+
+## Question 1 (Pooled cross sectional model; 8 points)
+
+Recall the garbage incinerator example we've seen in lecture and the same research question: "...to examine the hypothesis that ***the price of houses closer to the incinerator would fall relative to the price of those that are farther***...". With the "Keilmc" dataset, propose your own regression models and choose your own variables. Conduct a regression analysis in R or Stata and interpret your results.
+
+(a) **Model Specification and Justification (2 points)**: Clearly specify the regression models, and provide a justification for each chosen variable.
+(b) **Correct Application of Regression and Interpretation of Results (6 points)**: Correctly implement the regression in R or Stata. Interpret the direction (positive/negative) and magnitude of the key coefficients. Discuss statistical significance (e.g., p-values or confidence intervals) and practical relevance of the main variables. Connect the results back to the research question and assess whether the hypothesis is supported by the findings.
+-   Full marks require not only technical correctness, but also a comprehensive discussion of the results. Answers that are mechanically correct but lack interpretation, explanation, or economic reasoning will not receive full credit.
+
+## Question 2 (Panel data analysis; 12 points)
+
+For this panel data exercises, you can choose either one of the following datasets: 
+
+-  Option 1: the NLSW dataset used in lecture. 
+-  Option 2: County crime rates in North Carolina (crime4). 
+
+Conduct an analysis by addressing the following points.
+
+(a) **Research Question (1 point)**: Clearly state your main research question and briefly explain its motivation.
+(b) **Model Implementation and Specification (3 points)**: Clearly specify each of the following models by writing out the regression function: a pooled cross-sectional model, a first-difference model, a fixed effects model, and a random effects model. Provide a justification for your choice of variables.
+(c) **Regression Analysis and Interpretation (7 points)**: Correctly implement the regression analysis in R or Stata. Provide a clear and comprehensive interpretation of the results, including:
+-  explaining the direction (positive/negative) and magnitude of key coefficients,
+-  discussing statistical significance (e.g., p-values or confidence intervals),
+-  comparing results across the four models, and
+-  connecting the empirical findings back to your research question and hypothesis.
+(d) **Limitations (1 point)**: Identify and discuss any limitations of your analysis, such as data constraints, model assumptions, or potential sources of bias.
