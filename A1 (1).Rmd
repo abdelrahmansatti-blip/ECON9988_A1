@@ -26,6 +26,39 @@ If you use R markdown/sweave, please submit the .Rmd/.Rnw file. If you work in g
 Recall the garbage incinerator example we've seen in lecture and the same research question: "...to examine the hypothesis that ***the price of houses closer to the incinerator would fall relative to the price of those that are farther***...". With the "Keilmc" dataset, propose your own regression models and choose your own variables. Conduct a regression analysis in R or Stata and interpret your results.
 
 (a) **Model Specification and Justification (2 points)**: Clearly specify the regression models, and provide a justification for each chosen variable.
+library(wooldridge)
+library(stargazer)
+
+kielmc <- read.csv("kielmc (1).csv")
+?kielmc
+
+# Construct the interaction term explicitly if needed, 
+# though R handles it with the * operator.
+# We will use log(rprice) often for better significance, 
+# but PooledCS.R used rprice, so we stick to rprice for consistency.
+# Reg 1: The Basic DID Model
+# This tests the raw effect of the incinerator (nearinc * y81) without controls.
+reg1 <- lm(rprice ~ nearinc * y81, 
+           data=kielmc)
+
+# Reg 2: Adding Age Controls
+# We add 'age' and 'agesq' because older houses depreciate, which affects price.
+# This ensures the 'nearinc' effect isn't just because houses there are older.
+reg2 <- lm(rprice ~ nearinc * y81 + age + agesq, 
+           data=kielmc)
+
+# Reg 3: Full Model with Structural Characteristics
+# We add 'area', 'land', and 'baths'.
+# We interpret these as essential controls. If 'nearinc:y81' stays negative 
+# and significant here, the result is robust.
+# We are cautious about adding too many correlated vars, but these are distinct enough.
+reg3 <- lm(rprice ~ nearinc * y81 + age + agesq + area + land + baths, 
+           data=kielmc)
+
+# Display results side-by-side to compare coefficients
+stargazer::stargazer(reg1,reg2,reg3,type="text")
+
+hist(log(kielmc$price))
 (b) **Correct Application of Regression and Interpretation of Results (6 points)**: Correctly implement the regression in R or Stata. Interpret the direction (positive/negative) and magnitude of the key coefficients. Discuss statistical significance (e.g., p-values or confidence intervals) and practical relevance of the main variables. Connect the results back to the research question and assess whether the hypothesis is supported by the findings.
 -   Full marks require not only technical correctness, but also a comprehensive discussion of the results. Answers that are mechanically correct but lack interpretation, explanation, or economic reasoning will not receive full credit.
 
@@ -45,4 +78,5 @@ Conduct an analysis by addressing the following points.
 -  discussing statistical significance (e.g., p-values or confidence intervals),
 -  comparing results across the four models, and
 -  connecting the empirical findings back to your research question and hypothesis.
+
 (d) **Limitations (1 point)**: Identify and discuss any limitations of your analysis, such as data constraints, model assumptions, or potential sources of bias.
