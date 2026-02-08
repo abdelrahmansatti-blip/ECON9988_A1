@@ -70,6 +70,38 @@ Conduct an analysis by addressing the following points.
 
 (a) **Research Question (1 point)**: Clearly state your main research question and briefly explain its motivation.
 (b) **Model Implementation and Specification (3 points)**: Clearly specify each of the following models by writing out the regression function: a pooled cross-sectional model, a first-difference model, a fixed effects model, and a random effects model. Provide a justification for your choice of variables.
+
+
+nlsw <- read.csv("nlswork.csv")
+?nlsw
+# View(nlsw)
+# Research Question: how does being in a union affect wages, how does this effect change over job tenure?  
+# Motivation: we want to understand the impact of union membership on wages, and whether this impact varies with job tenure. This can provide insights into the benefits of union membership over time. Union membership costs money, but is the cost worth it?
+
+# model implementation and specification: we are going to have four different regression functions: a pooled cross-sectional, a first-difference, a fixed effects, and a random effects. 
+
+# model 1: pooled cross-sectional regression
+reg_pooled <- lm(ln_wage ~ union + ttl_exp + ind_code + tenure + collgrad + tenure + age  + factor(year), data = nlsw)
+
+
+# model 2: first-difference regression
+# the difference between the first-difference and the pooled cross-sectional regression is that we are going to take the difference of the variables over time for each individual, which will help us control for unobserved individual heterogeneity.
+nlsw_diff <- nlsw %>%
+  group_by(idcode) %>%
+  arrange(year) %>%
+  mutate(ln_wage_diff = ln_wage - lag(ln_wage),
+         union_diff = union - lag(union),
+         ttl_exp_diff = ttl_exp - lag(ttl_exp),
+         ind_code_diff = ind_code - lag(ind_code),
+         collgrad_diff = collgrad - lag(collgrad),
+         tenure_diff = tenure - lag(tenure),
+         age_diff = age - lag(age)) %>%
+  filter(!is.na(ln_wage_diff))
+reg_diff <- lm(ln_wage_diff ~ union_diff + ttl_exp_diff + ind_code_diff  + collgrad_diff + tenure_diff + age_diff, data = nlsw_diff)
+
+
+
+
 (c) **Regression Analysis and Interpretation (7 points)**: Correctly implement the regression analysis in R or Stata. Provide a clear and comprehensive interpretation of the results, including:
 -  explaining the direction (positive/negative) and magnitude of key coefficients,
 -  discussing statistical significance (e.g., p-values or confidence intervals),
@@ -77,5 +109,6 @@ Conduct an analysis by addressing the following points.
 -  connecting the empirical findings back to your research question and hypothesis.
 
 (d) **Limitations (1 point)**: Identify and discuss any limitations of your analysis, such as data constraints, model assumptions, or potential sources of bias.
+
 
 
