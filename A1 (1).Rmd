@@ -34,27 +34,28 @@ kielmc <- read.csv("kielmc (1).csv")
 View(kielmc)
 
 # Model 1 Separate 1978 and 1981
-reg1978 <- lm(rprice ~ nearinc + rooms + area + land + baths + age + cbd + intst + wind + factor(nbh),
+reg1978 <- lm(rprice ~ nearinc + rooms + area + land + baths + age + factor(nbh),
               data = kielmc,
               subset = (year == 1978)) # Before incinerator
 
-reg1981 <- lm(rprice ~ nearinc + rooms + area + land + baths + age + cbd + intst + wind + factor(nbh),
+reg1981 <- lm(rprice ~ nearinc + rooms + area + land + baths + age + factor(nbh),
               data = kielmc,
               subset = (year == 1981)) # after incinerator
 
 stargazer::stargazer(reg1978, reg1981, type = "text")
 
 # Model 2 DID
-DID <- lm(rprice ~ nearinc*y81 + rooms + area + land + baths + age + cbd + intst + wind + factor(nbh),
+DID <- lm(rprice ~ nearinc*y81 + rooms + area + land + baths + age + factor(nbh),
           data = kielmc)
 
 stargazer::stargazer(reg1978, reg1981, DID, type = "text")
 
 # Model 3
-DID_dist <- lm(rprice ~ ldist*y81 + rooms + area + land + baths + age + cbd + intst + wind + factor(nbh),
+DID_dist <- lm(rprice ~ ldist*y81 + rooms + area + land + baths + age + factor(nbh),
                data = kielmc)
 
 stargazer::stargazer(DID, DID_dist, type = "text")
+
 (b) **Correct Application of Regression and Interpretation of Results (6 points)**: Correctly implement the regression in R or Stata. Interpret the direction (positive/negative) and magnitude of the key coefficients. Discuss statistical significance (e.g., p-values or confidence intervals) and practical relevance of the main variables. Connect the results back to the research question and assess whether the hypothesis is supported by the findings.
 -   Full marks require not only technical correctness, but also a comprehensive discussion of the results. Answers that are mechanically correct but lack interpretation, explanation, or economic reasoning will not receive full credit.
 
@@ -76,4 +77,5 @@ Conduct an analysis by addressing the following points.
 -  connecting the empirical findings back to your research question and hypothesis.
 
 (d) **Limitations (1 point)**: Identify and discuss any limitations of your analysis, such as data constraints, model assumptions, or potential sources of bias.
+
 
