@@ -31,34 +31,30 @@ library(stargazer)
 
 kielmc <- read.csv("kielmc (1).csv")
 ?kielmc
+View(kielmc)
 
-# Construct the interaction term explicitly if needed, 
-# though R handles it with the * operator.
-# We will use log(rprice) often for better significance, 
-# but PooledCS.R used rprice, so we stick to rprice for consistency.
-# Reg 1: The Basic DID Model
-# This tests the raw effect of the incinerator (nearinc * y81) without controls.
-reg1 <- lm(rprice ~ nearinc * y81, 
-           data=kielmc)
+# Model 1 Separate 1978 and 1981
+reg1978 <- lm(rprice ~ nearinc + rooms + area + land + baths + age + cbd + intst + wind + factor(nbh),
+              data = kielmc,
+              subset = (year == 1978)) # Before incinerator
 
-# Reg 2: Adding Age Controls
-# We add 'age' and 'agesq' because older houses depreciate, which affects price.
-# This ensures the 'nearinc' effect isn't just because houses there are older.
-reg2 <- lm(rprice ~ nearinc * y81 + age + agesq, 
-           data=kielmc)
+reg1981 <- lm(rprice ~ nearinc + rooms + area + land + baths + age + cbd + intst + wind + factor(nbh),
+              data = kielmc,
+              subset = (year == 1981)) # after incinerator
 
-# Reg 3: Full Model with Structural Characteristics
-# We add 'area', 'land', and 'baths'.
-# We interpret these as essential controls. If 'nearinc:y81' stays negative 
-# and significant here, the result is robust.
-# We are cautious about adding too many correlated vars, but these are distinct enough.
-reg3 <- lm(rprice ~ nearinc * y81 + age + agesq + area + land + baths, 
-           data=kielmc)
+stargazer::stargazer(reg1978, reg1981, type = "text")
 
-# Display results side-by-side to compare coefficients
-stargazer::stargazer(reg1,reg2,reg3,type="text")
+# Model 2 DID
+DID <- lm(rprice ~ nearinc*y81 + rooms + area + land + baths + age + cbd + intst + wind + factor(nbh),
+          data = kielmc)
 
-hist(log(kielmc$price))
+stargazer::stargazer(reg1978, reg1981, DID, type = "text")
+
+# Model 3
+DID_dist <- lm(rprice ~ ldist*y81 + rooms + area + land + baths + age + cbd + intst + wind + factor(nbh),
+               data = kielmc)
+
+stargazer::stargazer(DID, DID_dist, type = "text")
 (b) **Correct Application of Regression and Interpretation of Results (6 points)**: Correctly implement the regression in R or Stata. Interpret the direction (positive/negative) and magnitude of the key coefficients. Discuss statistical significance (e.g., p-values or confidence intervals) and practical relevance of the main variables. Connect the results back to the research question and assess whether the hypothesis is supported by the findings.
 -   Full marks require not only technical correctness, but also a comprehensive discussion of the results. Answers that are mechanically correct but lack interpretation, explanation, or economic reasoning will not receive full credit.
 
@@ -80,3 +76,4 @@ Conduct an analysis by addressing the following points.
 -  connecting the empirical findings back to your research question and hypothesis.
 
 (d) **Limitations (1 point)**: Identify and discuss any limitations of your analysis, such as data constraints, model assumptions, or potential sources of bias.
+
